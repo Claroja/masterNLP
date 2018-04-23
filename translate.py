@@ -34,5 +34,28 @@ secretKey = ''
 fromLang = 'zh-CHS'
 toLang = 'EN'
 q = '严禁与碱类、胺类、碱金属、易燃物或可燃物、食用化学品等混装混运。'
-trans = trans(id=id,sk=secretKey,fromLang=fromLang,toLang=toLang)
-trans.trans(q)
+tran = trans(id=id,sk=secretKey,fromLang=fromLang,toLang=toLang)
+# a= tran.trans(q)
+# type(a)
+# a.keys()
+# a["translation"][0]
+
+import docx
+file=docx.Document("./Dear.docx")
+file2 = docx.Document()
+file2_list=[]
+for para in file.paragraphs:
+    print(para.text)
+    file2.add_paragraph(para.text)
+    tran = trans(id=id, sk=secretKey, fromLang=fromLang, toLang=toLang)
+    test= tran.trans(para.text)
+    try:
+        print(test["translation"][0])
+        file2_list.append(test["translation"][0])
+    except:
+        pass
+file2.add_paragraph("\n")
+for para in file2_list:
+    file2.add_paragraph(para)
+file2.save('demo.docx')
+
