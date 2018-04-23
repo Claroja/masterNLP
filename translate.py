@@ -1,5 +1,4 @@
-# /usr/bin/env python
-# coding=utf8
+# password.txt 第一行 id 第二行秘钥 第三行fromlang 第四行tolang
 
 import http.client as httplib
 import hashlib
@@ -29,33 +28,33 @@ class trans():
         return json.loads(a,encoding='utf8')
 
 
-id = ''
-secretKey = ''
-fromLang = 'zh-CHS'
-toLang = 'EN'
-q = '严禁与碱类、胺类、碱金属、易燃物或可燃物、食用化学品等混装混运。'
-tran = trans(id=id,sk=secretKey,fromLang=fromLang,toLang=toLang)
-# a= tran.trans(q)
-# type(a)
-# a.keys()
-# a["translation"][0]
+password = open('./password.txt')
+lines = password.readlines()
+id = lines[0].strip()
+secretKey = lines[1].strip()
+fromLang = lines[2].strip()
+toLang = lines[3].strip()
+
+import os
+docs = [word for word in os.listdir("./") if ".docx" in word]
+
 
 import docx
-file=docx.Document("./Dear.docx")
-file2 = docx.Document()
-file2_list=[]
-for para in file.paragraphs:
-    print(para.text)
-    file2.add_paragraph(para.text)
-    tran = trans(id=id, sk=secretKey, fromLang=fromLang, toLang=toLang)
-    test= tran.trans(para.text)
-    try:
-        print(test["translation"][0])
-        file2_list.append(test["translation"][0])
-    except:
-        pass
-file2.add_paragraph("\n")
-for para in file2_list:
-    file2.add_paragraph(para)
-file2.save('demo.docx')
-
+for doc in docs:
+    file=docx.Document("./%s"%doc)
+    file2 = docx.Document()
+    file2_list=[]
+    for para in file.paragraphs:
+        print(para.text)
+        file2.add_paragraph(para.text)
+        tran = trans(id=id, sk=secretKey, fromLang=fromLang, toLang=toLang)
+        test= tran.trans(para.text)
+        try:
+            print(test["translation"][0])
+            file2_list.append(test["translation"][0])
+        except:
+            pass
+    file2.add_paragraph("\n")
+    for para in file2_list:
+        file2.add_paragraph(para)
+    file2.save('trans-%s'%doc)
