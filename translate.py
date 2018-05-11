@@ -5,6 +5,8 @@ import hashlib
 import urllib.parse
 import random
 import json
+import os
+import docx
 class trans():
     def __init__(self,id,sk,fromLang,toLang):
         self.appKey = id
@@ -35,11 +37,11 @@ secretKey = lines[1].strip()
 fromLang = lines[2].strip()
 toLang = lines[3].strip()
 
-import os
+
 docs = [word for word in os.listdir("./") if ".docx" in word]
 
 
-import docx
+
 for doc in docs:
     file=docx.Document("./%s"%doc)
     file2 = docx.Document()
